@@ -1,17 +1,14 @@
 import { store } from '../redux/store';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom'
-import { useAppDispatch, useResizeListener } from './hooks';
-import { useCallback, useLayoutEffect } from 'react';
-import { setIsMobileScreen } from 'src/redux/features/ui.slice';
-import { isMobileScreen } from './helperFunctions';
+import { useAppDispatch } from './hooks';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
-import 'react-loading-skeleton/dist/skeleton.css'
 import THEME from './theme';
 import { NotificationsService } from 'src/services';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { useLayoutEffect } from 'react';
 THEME.injectStyles();
 
 let basename = '/';
@@ -30,11 +27,6 @@ export const useWrapperSetup = () => {
         // root.style.setProperty('--secondary', THEME.colors.secondary[500]);
     }, [])
 
-    const resizeListener = useCallback(() => {
-        dispatch(setIsMobileScreen(isMobileScreen()))
-    }, [dispatch])
-
-    useResizeListener(resizeListener)
 }
 
 

@@ -1,4 +1,4 @@
-import { useToggle } from "@react-hookz/web";
+import { useState } from "react";
 import { FallbackProps } from "react-error-boundary";
 import { RiErrorWarningFill } from "react-icons/ri";
 import Button from "src/Components/Button/Button";
@@ -8,7 +8,7 @@ import Card from "src/Components/Card/Card";
 
 export default function ErrorCard({ error, resetErrorBoundary }: FallbackProps) {
 
-    const [showDetails, toggleDetails] = useToggle(false)
+    const [showDetails, toggleDetails] = useState(false)
 
 
 
@@ -24,7 +24,7 @@ export default function ErrorCard({ error, resetErrorBoundary }: FallbackProps) 
 
                 <div className="self-start">
 
-                    <button className="text-gray-400 text-body5 underline" onClick={() => toggleDetails()}>{showDetails ? "Hide" : "Show"} error details</button>
+                    <button className="text-gray-400 text-body5 underline" onClick={() => toggleDetails(v => !v)}>{showDetails ? "Hide" : "Show"} error details</button>
                     {showDetails &&
                         <div className="mt-16 text-gray-600">
                             <p className="text-body3 text-gray-800">{error.name}</p>

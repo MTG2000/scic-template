@@ -1,6 +1,5 @@
 import { PropsWithChildren } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
-import Skeleton from "react-loading-skeleton";
 import { wrapLink } from "src/utils/hoc";
 import { UnionToObjectKeys } from "src/utils/types/utils";
 
@@ -59,7 +58,7 @@ export default function Badge(
         `
 
     if (isLoading)
-        return <Skeleton width="7ch" className={`${loadingBadgeSize[size]} !rounded-48`} />
+        return <div className={`${loadingBadgeSize[size]} h-7ch] !rounded-48`} />
 
 
 

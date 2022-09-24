@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { UnionToObjectKeys } from 'src/utils/types/utils';
-import { Link } from 'react-router-dom'
 import { TailSpin } from 'react-loader-spinner';
+import { Link } from 'react-router-dom'
 
 type Props = {
     color?: 'primary' | 'red' | 'white' | 'gray' | "black" | 'none',

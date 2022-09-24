@@ -1,7 +1,5 @@
-import dayjs from "dayjs";
-import React, { ComponentProps, ComponentType, Suspense } from "react";
-import { RotatingLines } from "react-loader-spinner";
-import { isNullOrUndefined } from "remirror";
+
+import React from "react";
 import axios from 'axios'
 
 export function random(min: number, max: number) {
@@ -20,46 +18,8 @@ export function isMobileScreen() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 }
 
-export function numberFormatter(num?: number, digits = 1) {
-  if (isNullOrUndefined(num)) return;
-
-  const lookup = [
-    { value: 1, symbol: "" },
-    { value: 1e3, symbol: "k" },
-    { value: 1e6, symbol: "M" },
-    { value: 1e9, symbol: "G" },
-    { value: 1e12, symbol: "T" },
-    { value: 1e15, symbol: "P" },
-    { value: 1e18, symbol: "E" }
-  ];
-  const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-  var item = lookup.slice().reverse().find(function (item) {
-    return num >= item.value;
-  });
-  return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
-}
 
 
-
-export function lazyModal<T extends ComponentType<any>>
-  (impFn: () => Promise<{ default: T; }>,
-    LoadingComponent?: (props: any) => JSX.Element) {
-  const C = React.lazy(() => new Promise(res => setTimeout(() => {
-    res(impFn() as any)
-  }, 0))) // This promise wrapping is just for testing purposes
-  const preload = impFn;
-  const LazyComponent = ({ direction, ...props }: ComponentProps<T>) => <Suspense
-    fallback={
-      LoadingComponent ?
-        <LoadingComponent direction={direction} {...props} />
-        :
-        <RotatingLines strokeColor='#ffffff' width="64" />
-    }>
-    <C direction={!LoadingComponent && direction} {...props} />
-  </Suspense>
-
-  return { LazyComponent, preload };
-}
 
 export function trimText(text: string | undefined | null, length: number) {
   if (!text) return '';
@@ -117,23 +77,6 @@ export function getPropertyFromUnknown<Value = string>(obj: unknown, prop: strin
   return null
 }
 
-export function getDateDifference(date: string, { dense }: { dense?: boolean } = {}) {
-  const now = dayjs();
-  const mins = now.diff(date, 'minute');
-  if (mins < 60)
-    return mins + (dense ? 'm' : " minutes");
-
-  const hrs = now.diff(date, 'hour');
-  if (hrs < 24)
-    return hrs + (dense ? 'h' : " hours");
-
-  const days = now.diff(date, 'day');
-  if (days < 30)
-    return days + (dense ? 'd' : " days");
-
-  const months = now.diff(date, 'month');
-  return months + (dense ? 'mo' : " months")
-}
 
 
 export async function lightningAddressToPR(address: string, amount_in_sat: number) {
@@ -167,18 +110,18 @@ export async function lightningAddressToPR(address: string, amount_in_sat: numbe
     });
 }
 
-export const getSpanDate = (_date1: string, _date2: string) => {
-  const date1 = new Date(_date1);
-  const date2 = new Date(_date2);
 
-  const isSameMonth = date1.getMonth() === date2.getMonth();
-  if (!isSameMonth)
-    return `${dayjs(_date1).format('Do MMM')} - ${dayjs(_date2).format('Do MMM')}`
+export function extractErrorInfo(error: any, options?: Partial<{ defaultMessage: string }>) {
 
-  const isSameDay = date1.getDay() === date2.getDay();
-  if (!isSameDay)
-    return `${dayjs(_date1).format('Do')} - ${dayjs(_date2).format('Do MMM')}`
-  // Same Day
-  return `${dayjs(_date1).format('H:mm')} - ${dayjs(_date2).format('H:mm, Do MMM')}`
+  const {
+    defaultMessage = "An Unexpected error happened...",
+  } = options ?? {}
 
+
+  try {
+    const data = error.response.data;
+    return { title: data.title ?? "UnexpectedError", detail: data.detail ?? defaultMessage }
+  } catch (error) {
+    return { title: "UnexpectedError", detail: options?.defaultMessage ?? "An Unexpected error happened..." }
+  }
 }
