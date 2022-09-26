@@ -7,4 +7,5 @@ export * from './useMediaQuery'
 export * from './usePrompt'
 export * from './useIsDraggingOnElement'
 export * from './useCountdown'
+export * from './useModalState'
 
