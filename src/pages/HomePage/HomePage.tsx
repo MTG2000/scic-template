@@ -11,7 +11,7 @@ export default function HomePage() {
     const basicModal = useModalState(false);
 
     return (
-        <div className="page-container">
+        <div  >
             <div className="flex gap-16">
                 <Button onClick={basicModal.open}>Open Basic Modal</Button>
                 <Button onClick={insertInfoModal.open}>Open Insert Info Modal</Button>
