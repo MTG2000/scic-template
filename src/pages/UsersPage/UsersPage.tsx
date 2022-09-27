@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 import { getAllUsers, User, } from 'src/api'
 import DataRow from 'src/Components/DataRow/DataRow'
-import LoadingPage from 'src/Components/LoadingPage/LoadingPage'
+import ErrorMessage from 'src/Components/ErrorMessage/ErrorMessage'
+import Loading from 'src/Components/Loading/Loading'
 import ConfirmModal from 'src/Components/Modals/ConfirmModal/ConfirmModal'
 import InsertInfoModal from 'src/Components/Modals/InsertInfoModal/InsertInfoModal'
 import Modal from 'src/Components/Modals/Modal/Modal'
@@ -19,10 +20,12 @@ export default function UsersPage() {
     const editModal = useModalState();
 
     if (query.isLoading)
-        return <LoadingPage />
+        return <Loading size='lg' >
+            Loading Users...
+        </Loading>
 
     if (query.error)
-        return <div className="text-red-500">An error happened</div>
+        return <ErrorMessage />
 
     const onDelete = (user: User) => {
         setSelectedUser(user);
