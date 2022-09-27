@@ -9,6 +9,7 @@ import * as yup from "yup";
 import Card from 'src/Components/Card/Card'
 
 interface IForm {
+    id?: string
     email: string;
     name: string
     age: number;
@@ -20,14 +21,19 @@ const schema = yup.object({
     age: yup.number().positive().min(18).max(150).required(),
 }).required();
 
-export default function InsertInfoModal() {
+interface Props {
+    initValue?: IForm
+}
+
+export default function InsertInfoModal({ initValue }: Props) {
 
     const { register, handleSubmit, formState: { errors }, } = useForm<IForm>({
         resolver: yupResolver(schema),
         defaultValues: {
-            email: "",
-            name: "",
-            age: 20,
+            id: initValue?.id ?? undefined,
+            email: initValue?.email ?? "",
+            name: initValue?.name ?? "",
+            age: initValue?.age ?? 20,
         },
     });
 
@@ -45,8 +51,21 @@ export default function InsertInfoModal() {
                 >
                     Insert Info
                 </Dialog.Title>
+
+                < p className="text-body5 mt-16 font-medium" >
+                    Name
+                </p >
+                <div className="input-wrapper mt-8 relative">
+                    <input
+                        className="input-text"
+                        placeholder="John Doe"
+                        {...register("name")}
+                    />
+                </div>
+                <p className='input-error'>{errors.name?.message}</p>
+
                 <p className="text-body5 mt-16 font-medium" >
-                    Your website
+                    Email
                 </p>
                 <div className="input-wrapper mt-8 relative">
                     <input
@@ -61,21 +80,6 @@ export default function InsertInfoModal() {
                         {errors.email.message}
                     </p>
                 }
-
-                <div>
-                    < p className="text-body5 mt-16 font-medium" >
-                        Name
-                    </p >
-                    <div className="input-wrapper mt-8 relative">
-                        <input
-                            className="input-text"
-                            placeholder="John Doe"
-                            {...register("name")}
-                        />
-                    </div>
-                    <p className='input-error'>{errors.name?.message}</p>
-                </div>
-
                 <div>
                     < p className="text-body5 mt-16 font-medium" >
                         Age
